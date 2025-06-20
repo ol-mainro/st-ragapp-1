@@ -64,7 +64,7 @@ if "messages" not in st.session_state:
 for msg in st.session_state.messages:
     st.chat_message(msg["role"]).write(msg["content"])
 
-if prompt := st.chat_input(placeholder="Qui est Charles Darwin ?"):
+if prompt := st.chat_input(placeholder="Qui est Charles Darwin ? Qui est Jean-François Dortier ? Qu'est ce qu'est la TSE ?"):
     st.session_state.messages.append({"role": "user", "content": prompt})
     st.chat_message("user").write(prompt)
 
@@ -93,7 +93,7 @@ if prompt := st.chat_input(placeholder="Qui est Charles Darwin ?"):
         ai_msg = llm.invoke(messages)
         print(ai_msg.content)
 
-        st.write('Réponse avec la base de connaissance sur mesure (RAG): ')
+        st.write('**Réponse avec la base de connaissance sur mesure (RAG):**')
         st.write(answer)
-        st.write('Réponse sans (GPT générique) : ')
+        st.write('**Réponse sans (GPT générique):**')
         st.write(ai_msg.content)
