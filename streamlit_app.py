@@ -48,7 +48,12 @@ vector_store = SupabaseVectorStore(
 st.title("🔎 L'humanologue")
 
 """
-Je suis l'humanologue.
+Je suis l'Humanologue, je sais tout sur les humains.
+
+Ici nous pouvons évaluer une utilisation basique de l'approche RAG (Retrieval augmented Generation), 
+pour améliorer les réponses d'un modèle de langue (LLM = Large Language Model), tel GPT d'OpenAI. 
+La question de l'utilisateur est d'abord prise pour interroger une base de connaissances spécifique, 
+puis le LLM est interrogé en lui demandant de prendre la réponse de la base spécifique en compte.
 """
 
 if "messages" not in st.session_state:
@@ -59,14 +64,12 @@ if "messages" not in st.session_state:
 for msg in st.session_state.messages:
     st.chat_message(msg["role"]).write(msg["content"])
 
-if prompt := st.chat_input(placeholder="Who won the Women's U.S. Open in 2018?"):
+if prompt := st.chat_input(placeholder="Qui est Charles Darwin ?"):
     st.session_state.messages.append({"role": "user", "content": prompt})
     st.chat_message("user").write(prompt)
 
     with st.chat_message("assistant"):
         st_cb = StreamlitCallbackHandler(st.container(), expand_new_thoughts=False)
-        # response = search_agent.run(st.session_state.messages, callbacks=[st_cb])
-        # st.session_state.messages.append({"role": "assistant", "content": response})
 
         memory = ConversationBufferMemory(memory_key='chat_history', return_messages=True)
 
@@ -90,7 +93,7 @@ if prompt := st.chat_input(placeholder="Who won the Women's U.S. Open in 2018?")
         ai_msg = llm.invoke(messages)
         print(ai_msg.content)
 
-        st.write('Réponse avec la base de connaissance sur mesure : ')
+        st.write('Réponse avec la base de connaissance sur mesure (RAG): ')
         st.write(answer)
-        st.write('Réponse sans : ')
+        st.write('Réponse sans (GPT générique) : ')
         st.write(ai_msg.content)
